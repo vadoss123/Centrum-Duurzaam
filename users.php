@@ -157,18 +157,17 @@ $rollen = $userManager->getAvailableRoles();
     <ul>
         <li><a href="dashboard.php"><i class="fas fa-bars"></i> Dashboard</a></li>
         <li><a href="index.php"><i class="fas fa-bars"></i> Hoofdpagina</a></li>
-        <li><a href="persoongegevens.php"><i class="fas fa-bars"></i> Persoongegevens</a></li>
+        <li><a href="users.php"><i class="fas fa-bars"></i> Persoongegevens</a></li>
         <li><a href="klantgegevens.php"><i class="fas fa-bars"></i> Klantgegevens</a></li>
         <li><a href="voorraadbeheer.php"><i class="fas fa-bars"></i> Voorraadbeheer</a></li>
         <li><a href="opbrengst_verkopen.php"><i class="fas fa-bars"></i> Opbrengst Verkopen</a></li>
         <li><a href="rit_planning.php"><i class="fas fa-bars"></i> Rit Planning</a></li>
-        <li><a href="users.php" style="background-color: #1ABC9C;"><i class="fas fa-bars"></i> Gebruikersbeheer</a></li>
     </ul>
 </div>
 
 
 <div class="content">
-    <h2>Gebruikersbeheer</h2>
+    <h2>persoongegevens</h2>
 
     <table>
         <tr>
@@ -208,3 +207,4 @@ $rollen = $userManager->getAvailableRoles();
 
 </body>
 </html>
+
