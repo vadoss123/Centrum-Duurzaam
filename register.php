@@ -4,7 +4,7 @@ require 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $gebruikersnaam = $_POST['gebruikersnaam'];
-    $wachtwoord = $_POST['wachtwoord']; // Wachtwoord niet hashen
+    $wachtwoord = password_hash($_POST['wachtwoord'], PASSWORD_DEFAULT);
     $rollen = $_POST['rollen'];
 
     $stmt = $conn->prepare("INSERT INTO gebruiker (gebruikersnaam, wachtwoord, rollen, is_geverifieerd) VALUES (?, ?, ?, 0)");
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <div class="container mt-5">
-        <h2>RegiALALALALAAL</h2>
+        <h2>Registreren</h2>
         <?php if (isset($error)) echo "<div class='alert alert-danger'>$error</div>"; ?>
         <form method="POST">
             <div class="mb-3">
@@ -41,8 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="password" name="wachtwoord" class="form-control" required>
             </div>
             <div class="mb-3">
-                <label class="form-label">Rol</label>
-                <select name="rollen" class="form-control">
+                <label class="form-label">Rol</label><select name="rollen" class="form-control">
                     <option value="directie">Directie</option>
                     <option value="magazijnmedewerker">Magazijnmedewerker</option>
                     <option value="winkelpersoneel">Winkelpersoneel</option>
