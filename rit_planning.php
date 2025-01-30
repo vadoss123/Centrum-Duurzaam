@@ -26,7 +26,7 @@ class RitManager {
 
     // Haal alle ritten op
     public function getAllRitten() {
-        $stmt = $this->db->query("SELECT p.id, p.ophalen_of_bezorgen, p.afspraak_op, k.naam, a.naam as artikel 
+        $stmt = $this->db->query("SELECT p.id, p.ophalen_of_bezorgen, p.afspraak_op, k.naam, a.naam as artikel, p.kenteken 
                                   FROM planning p 
                                   JOIN klant k ON p.klant_id = k.id 
                                   JOIN artikel a ON p.artikel_id = a.id
@@ -68,13 +68,20 @@ $artikelen = $ritManager->getAllArtikelen();
 
 // Verwerk het toevoegen van een rit
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add'])) {
-    $artikel_id = isset($_POST['artikel_id']) ? $_POST['artikel_id'] : null; // Controleer of artikel_id aanwezig is
-    $klant_id = $_POST['klant_id']; // Klant wordt nu geselecteerd uit de dropdown
-    $kenteken = $_POST['kenteken'];
-    $ophalen_of_bezorgen = $_POST['ophalen_of_bezorgen'];
-    $afspraak_op = $_POST['afspraak_op'];
+    // Controleer of de velden bestaan in de POST-gegevens en gebruik een fallback voor 'kenteken'
+    $artikel_id = isset($_POST['artikel_id']) ? $_POST['artikel_id'] : null;
+    $klant_id = isset($_POST['klant_id']) ? $_POST['klant_id'] : null;
+    $kenteken = isset($_POST['kenteken']) ? $_POST['kenteken'] : '';  // Voeg een fallback waarde toe voor 'kenteken'
+    $ophalen_of_bezorgen = isset($_POST['ophalen_of_bezorgen']) ? $_POST['ophalen_of_bezorgen'] : '';
+    $afspraak_op = isset($_POST['afspraak_op']) ? $_POST['afspraak_op'] : '';
     
     try {
+        // Controleer of de velden niet leeg zijn
+        if (empty($artikel_id) || empty($klant_id) || empty($kenteken) || empty($ophalen_of_bezorgen) || empty($afspraak_op)) {
+            throw new Exception("Alle velden moeten ingevuld worden.");
+        }
+
+        // Voeg rit toe
         if ($ritManager->addRit($artikel_id, $klant_id, $kenteken, $ophalen_of_bezorgen, $afspraak_op)) {
             header("Location: rit_planning.php");  // Herlaad de pagina
             exit;
@@ -215,7 +222,7 @@ $ritten = $ritManager->getAllRitten();
         <li><a href="index.php"><i class="fas fa-bars"></i> Hoofdpagina</a></li>
         <li><a href="users.php"><i class="fas fa-bars"></i> Persoongegevens</a></li>
         <li><a href="klantgegevens.php"><i class="fas fa-bars"></i> Klantgegevens</a></li>
-        <li><a href="voorraadbeheer.php"><i class="fas fa-bars"></i> Voorraadbeheer</a></li>
+        <li><a href="voorraad.php"><i class="fas fa-bars"></i> Voorraadbeheer</a></li>
         <li><a href="opbrengst_verkopen.php"><i class="fas fa-bars"></i> Opbrengst Verkopen</a></li>
         <li><a href="rit_planning.php"><i class="fas fa-bars"></i> Rit Planning</a></li>
     </ul>
@@ -284,7 +291,7 @@ $ritten = $ritManager->getAllRitten();
             <td><?= htmlspecialchars($rit['id']) ?></td>
             <td><?= htmlspecialchars($rit['artikel']) ?></td>
             <td><?= htmlspecialchars($rit['naam']) ?></td>
-            <td><?= htmlspecialchars($rit['kenteken']) ?></td>
+            <td><?= htmlspecialchars($rit['kenteken']) ?></td> <!-- Hier komt de kentekenwaarde -->
             <td><?= htmlspecialchars($rit['ophalen_of_bezorgen']) ?></td>
             <td><?= htmlspecialchars($rit['afspraak_op']) ?></td>
         </tr>
