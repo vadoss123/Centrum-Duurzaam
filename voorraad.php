@@ -2,27 +2,9 @@
 session_start();
 require 'db.php';
 
-// Zoekfunctionaliteit
-$search = '';
-if (isset($_POST['search'])) {
-    $search = $_POST['search'];
-}
-
-// SQL-query voor het ophalen van voorraadgegevens, met een JOIN op de artikel tabel om de naam te krijgen
-$query = "
-    SELECT voorraad.id, voorraad.artikel_id, voorraad.status_id, voorraad.aantal, artikel.naam 
-    FROM voorraad 
-    JOIN artikel ON voorraad.artikel_id = artikel.id
-    WHERE voorraad.artikel_id LIKE :search OR artikel.naam LIKE :search
-";
-$stmt = $conn->prepare($query);
-
-// Bind de zoekparameter (we gebruiken % om de zoekterm in het midden van de kolom te vinden)
-$stmt->bindValue(':search', '%' . $search . '%');
-$stmt->execute();
-
-// Haal alle voorraadgegevens op
-$artikelen = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Verkrijg de artikelen
+$stmt = $conn->query("SELECT * FROM artikel");
+$artikelen = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -30,8 +12,8 @@ $artikelen = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voorraad Beheer</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Voorraadbeheer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
@@ -95,19 +77,9 @@ $artikelen = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background-color: #f4f4f4;
         }
 
-        button {
+        .btn-sm {
             padding: 5px 10px;
-            margin: 2px;
-            cursor: pointer;
-        }
-
-        select, input {
-            padding: 5px;
-        }
-
-        .form-control {
-            width: 100%;
-            max-width: 400px;
+            font-size: 14px;
         }
 
         .table-responsive {
@@ -143,50 +115,49 @@ $artikelen = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="content">
     <div class="container mt-5">
-        <h1>Voorraad Beheer</h1>
-
-        <!-- Zoekformulier -->
-        <form method="POST" action="">
-            <div class="mb-3">
-                <label for="search" class="form-label">Zoek Artikel</label>
-                <input type="text" class="form-control" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Zoek op artikelnummer of omschrijving">
-            </div>
-            <button type="submit" class="btn btn-primary">Zoek</button>
-        </form>
-
-        <!-- Voorraad Overzicht -->
+        <h2>Voorraad Artikel Overzicht</h2>
+        <!-- Toegevoegde knop die naar voorraad_invoer.php verwijst -->
+        <a href="voorraad_invoer.php" class="btn btn-primary mb-3">
+            <i class="fas fa-plus"></i> Voeg Artikel In
+        </a>
+        
         <div class="table-responsive">
-            <table class="table table-bordered mt-4">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Artikel ID</th>
                         <th>Artikel Naam</th>
-                        <th>Aantal</th>
-                        <th>Status ID</th>
+                        <th>Soort</th>
+                        <th>Type</th>
+                        <th>Merk</th>
+                        <th>Verkoop Gereed</th>
+                        <th>Prijs</th>
+                        <th>Acties</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    // Zorg ervoor dat de variabele $artikelen gevuld is met data uit de database
-                    if ($artikelen) {
-                        foreach ($artikelen as $item) {
-                            echo "<tr>";
-                            echo "<td>" . htmlspecialchars($item['artikel_id']) . "</td>";
-                            echo "<td>" . htmlspecialchars($item['naam']) . "</td>";
-                            echo "<td>" . htmlspecialchars($item['aantal']) . "</td>";
-                            echo "<td>" . htmlspecialchars($item['status_id']) . "</td>";
-                            echo "</tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='4'>Geen resultaten gevonden</td></tr>";
-                    }
-                    ?>
+                    <?php foreach ($artikelen as $artikel): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($artikel['naam']); ?></td>
+                            <td><?php echo htmlspecialchars($artikel['soort']); ?></td>
+                            <td><?php echo htmlspecialchars($artikel['type']); ?></td>
+                            <td><?php echo htmlspecialchars($artikel['merk']); ?></td>
+                            <td><?php echo htmlspecialchars($artikel['verkoop_gereed']); ?></td>
+                            <td>€<?php echo htmlspecialchars($artikel['artikel_prijs']); ?></td>
+                            <td>
+                                <a href="bewerk_voorraad.php?edit=<?php echo $artikel['id']; ?>" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i> Bewerk
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
