@@ -3,11 +3,13 @@ class Card {
     public $title;
     public $description;
     public $buttonText;
+    public $link;
 
-    public function __construct($title, $description, $buttonText) {
+    public function __construct($title, $description, $buttonText, $link) {
         $this->title = $title;
         $this->description = $description;
         $this->buttonText = $buttonText;
+        $this->link = $link;
     }
 
     public function render() {
@@ -16,19 +18,19 @@ class Card {
             <div class='card text-center p-4 shadow-sm rounded-4' style='width: 100%; max-width: 500px;'>
                 <h4 class='fw-bold'>{$this->title}</h4>
                 <p class='text-muted'>{$this->description}</p>
-                <a href='#' class='btn btn-primary rounded-pill'>{$this->buttonText}</a>
+                <a href='{$this->link}' class='btn btn-primary rounded-pill'>{$this->buttonText}</a>
             </div>
         </div>
         ";
     }
 }
 
-// Cards aanmaken
+// Cards aanmaken met links
 $cards = [
-    new Card("Kledingstukken", "Beschrijving", "Ga naar kledingstukken"),
-    new Card("Ritten", "Beschrijving", "Ga naar ritten"),
-    new Card("Klanten", "Beschrijving", "Ga naar klanten"),
-    new Card("Voorraad beheer", "Beschrijving", "Ga naar voorraad beheer"),
+    new Card("Kledingstukken", "Beschrijving", "Ga naar kledingstukken", "kledingstukken.php"),
+    new Card("Ritten", "Beschrijving", "Ga naar ritten", "ritten.php"),
+    new Card("Klanten", "Beschrijving", "Ga naar klanten", "klanten.php"),
+    new Card("Voorraad beheer", "Beschrijving", "Ga naar voorraad beheer", "voorraad.php"),
 ];
 ?>
 
@@ -50,6 +52,12 @@ $cards = [
         .btn-outline-light {
             border-width: 1px;
         }
+        .navbar-nav {
+            gap: 15px;
+        }
+        .navbar-brand {
+            margin-right: 30px;
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -58,18 +66,15 @@ $cards = [
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">Kringloop Centrum</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Ritten</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Voorraadbeheer</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Admin</a></li>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ritten.php">Ritten</a></li>
+                    <li class="nav-item"><a class="nav-link" href="voorraad.php">Voorraadbeheer</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admin.php">Admin</a></li>
                 </ul>
-                <a href="#" class="btn btn-outline-light">Aanmelden</a>
             </div>
+            <a href="login.php" class="btn btn-outline-light">Aanmelden</a>
         </div>
     </nav>
 
