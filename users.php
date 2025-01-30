@@ -40,7 +40,7 @@ class UserManager {
     }
 
     public function getAvailableRoles() {
-        return ['Admin', 'Gebruiker', 'Moderator', 'Beheerder'];
+        return ['Admin', 'magazijnmederwerker', 'winkelpersoneel', 'chaffeur'];
     }
 }
 
@@ -155,11 +155,11 @@ $rollen = $userManager->getAvailableRoles();
 <!-- Sidebar Menu -->
 <div class="sidebar">
     <ul>
-        <li><a href="dashboard.php"><i class="fas fa-bars"></i> Dashboard</a></li>
+        <li><a href="index.php"><i class="fas fa-bars"></i> Dashboard</a></li>
         <li><a href="index.php"><i class="fas fa-bars"></i> Hoofdpagina</a></li>
         <li><a href="users.php"><i class="fas fa-bars"></i> Persoongegevens</a></li>
         <li><a href="klantgegevens.php"><i class="fas fa-bars"></i> Klantgegevens</a></li>
-        <li><a href="voorraadbeheer.php"><i class="fas fa-bars"></i> Voorraadbeheer</a></li>
+        <li><a href="voorraad.php"><i class="fas fa-bars"></i> Voorraadbeheer</a></li>
         <li><a href="opbrengst_verkopen.php"><i class="fas fa-bars"></i> Opbrengst Verkopen</a></li>
         <li><a href="rit_planning.php"><i class="fas fa-bars"></i> Rit Planning</a></li>
     </ul>
