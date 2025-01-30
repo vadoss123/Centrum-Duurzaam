@@ -73,8 +73,9 @@ $rollen = $userManager->getAvailableRoles();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <title>Gebruikersbeheer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -85,7 +86,7 @@ $rollen = $userManager->getAvailableRoles();
         .sidebar {
             width: 250px;
             height: 100vh;
-            background-color:rgb(156, 176, 197);
+            background-color: rgb(156, 176, 197);
             padding-top: 20px;
             position: fixed;
         }
@@ -101,20 +102,19 @@ $rollen = $userManager->getAvailableRoles();
         }
 
         .sidebar a {
-    text-decoration: none;
-    color: black; /* Verander tekstkleur naar zwart */
-    display: block;
-    font-size: 16px;
-    transition: 0.3s;
-    padding: 10px;
-}
+            text-decoration: none;
+            color: black;
+            display: block;
+            font-size: 16px;
+            transition: 0.3s;
+            padding: 10px;
+        }
 
-.sidebar a:hover {
-    background-color: #16A085;
-    padding-left: 10px;
-    color: white; /* Optioneel: verander tekstkleur bij hover naar wit */
-}
-
+        .sidebar a:hover {
+            background-color: #16A085;
+            padding-left: 10px;
+            color: white;
+        }
 
         .content {
             margin-left: 260px;
@@ -129,7 +129,7 @@ $rollen = $userManager->getAvailableRoles();
         }
 
         th, td {
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
             text-align: left;
         }
@@ -138,73 +138,89 @@ $rollen = $userManager->getAvailableRoles();
             background-color: #f4f4f4;
         }
 
-        button {
+        .btn-sm {
             padding: 5px 10px;
-            margin: 2px;
-            cursor: pointer;
+            font-size: 14px;
         }
 
-        select, input {
-            padding: 5px;
+        .table-responsive {
+            overflow-x: auto;
         }
 
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .content {
+                margin-left: 0;
+            }
+        }
     </style>
 </head>
 <body>
 
-<!-- Sidebar Menu -->
 <div class="sidebar">
     <ul>
-        <li><a href="index.php"><i class="fas fa-bars"></i> Dashboard</a></li>
+        <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
         <li><a href="index.php"><i class="fas fa-bars"></i> Hoofdpagina</a></li>
-        <li><a href="users.php"><i class="fas fa-bars"></i> Persoongegevens</a></li>
-        <li><a href="klantgegevens.php"><i class="fas fa-bars"></i> Klantgegevens</a></li>
-        <li><a href="voorraad.php"><i class="fas fa-bars"></i> Voorraadbeheer</a></li>
-        <li><a href="opbrengst_verkopen.php"><i class="fas fa-bars"></i> Opbrengst Verkopen</a></li>
-        <li><a href="rit_planning.php"><i class="fas fa-bars"></i> Rit Planning</a></li>
+        <li><a href="users.php"><i class="fas fa-users"></i> Persoongegevens</a></li>
+        <li><a href="klantgegevens.php"><i class="fas fa-address-book"></i> Klantgegevens</a></li>
+        <li><a href="voorraad.php"><i class="fas fa-boxes"></i> Voorraadbeheer</a></li>
+        <li><a href="opbrengst_verkopen.php"><i class="fas fa-chart-line"></i> Opbrengst Verkopen</a></li>
+        <li><a href="rit_planning.php"><i class="fas fa-route"></i> Rit Planning</a></li>
     </ul>
 </div>
 
-
 <div class="content">
-    <h2>persoongegevens</h2>
-
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Gebruikersnaam</th>
-            <th>Rollen</th>
-            <th>Acties</th>
-        </tr>
-        <?php foreach ($gebruikers as $gebruiker): ?>
-        <tr>
-            <td><?= htmlspecialchars($gebruiker['id']) ?></td>
-            <td>
-                <form action="users.php" method="post" style="display:inline;">
-                    <input type="hidden" name="id" value="<?= $gebruiker['id'] ?>">
-                    <input type="text" name="gebruikersnaam" value="<?= htmlspecialchars($gebruiker['gebruikersnaam']) ?>" required>
-            </td>
-            <td>
-                    <select name="rollen">
-                        <?php foreach ($rollen as $rol): ?>
-                            <option value="<?= $rol ?>" <?= ($gebruiker['rollen'] == $rol) ? 'selected' : '' ?>>
-                                <?= $rol ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-            </td>
-            <td>
-                    <button type="submit" name="update">✏️ Bewerk</button>
-                </form>
-                <a href="users.php?delete=<?= $gebruiker['id'] ?>" onclick="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?')">
-                    <button style="background-color: red; color: white;">❌ Verwijder</button>
-                </a>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </table>
+    <h2>Persoongegevens</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Gebruikersnaam</th>
+                    <th>Rollen</th>
+                    <th>Acties</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($gebruikers as $gebruiker): ?>
+                <tr>
+                    <td><?= htmlspecialchars($gebruiker['id']) ?></td>
+                    <td>
+                        <form action="users.php" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="<?= $gebruiker['id'] ?>">
+                            <input type="text" name="gebruikersnaam" value="<?= htmlspecialchars($gebruiker['gebruikersnaam']) ?>" required>
+                    </td>
+                    <td>
+                        <select name="rollen">
+                            <?php foreach ($rollen as $rol): ?>
+                                <option value="<?= $rol ?>" <?= ($gebruiker['rollen'] == $rol) ? 'selected' : '' ?>>
+                                    <?= $rol ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="submit" name="update" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Bewerk
+                        </button>
+                        <a href="users.php?delete=<?= $gebruiker['id'] ?>" onclick="return confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?')" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Verwijder
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
-
