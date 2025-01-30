@@ -28,8 +28,8 @@ class Card {
 // Cards aanmaken met links
 $cards = [
     new Card("Kledingstukken", "Beschrijving", "Ga naar kledingstukken", "kledingstukken.php"),
-    new Card("Ritten", "Beschrijving", "Ga naar ritten", "ritten.php"),
-    new Card("Klanten", "Beschrijving", "Ga naar klanten", "klanten.php"),
+    new Card("Ritten", "Beschrijving", "Ga naar ritten", "rit_planning.php"),
+    new Card("Klanten", "Beschrijving", "Ga naar klanten", "klantgegevens.php"),
     new Card("Voorraad beheer", "Beschrijving", "Ga naar voorraad beheer", "voorraad.php"),
 ];
 ?>
@@ -58,6 +58,10 @@ $cards = [
         .navbar-brand {
             margin-right: 30px;
         }
+        /* Maak de tekst van de dropdown zwart */
+        .navbar-nav .dropdown-menu .dropdown-item {
+            color: black !important;
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -69,9 +73,21 @@ $cards = [
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="ritten.php">Ritten</a></li>
+                    <li class="nav-item"><a class="nav-link" href="rit_planning.php">Ritten</a></li>
                     <li class="nav-item"><a class="nav-link" href="voorraad.php">Voorraadbeheer</a></li>
-                    <li class="nav-item"><a class="nav-link" href="admin.php">Admin</a></li>
+
+                    <!-- Admin Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Admin
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="rit_planning.php">Rit</a></li>
+                            <li><a class="dropdown-item" href="voorraad.php">Voorraad</a></li>
+                            <li><a class="dropdown-item" href="klantgegevens.php">Klanten</a></li>
+                        </ul>
+                    </li>
+
                 </ul>
             </div>
             <a href="login.php" class="btn btn-outline-light">Aanmelden</a>
